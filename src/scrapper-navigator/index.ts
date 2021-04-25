@@ -49,6 +49,10 @@ export class ScrapperNavigator extends EventEmitter {
       throw new Error("PASSWORD_REQUIRED");
     }
 
+    if (!config.authorizeUrl) {
+      throw new Error("AUTHORIZE_URL_REQUIRED");
+    }
+
     let password = config.password;
 
     await this.page.goto(config.authorizeUrl);
