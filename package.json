@@ -1,0 +1,26 @@
+{
+  "name": "mooodle-scapper",
+  "version": "0.2.0",
+  "description": "Puppeteer crawler o download moodle's resources",
+  "main": "./dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "node ./dist/main.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "mime-types": "^2.1.28",
+    "prompts": "^2.4.0",
+    "puppeteer": "^5.5.0",
+    "qs": "^6.9.6"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^2.1.0",
+    "@types/prompts": "^2.0.9",
+    "@types/puppeteer": "^5.4.2",
+    "typescript": "^4.2.4"
+  }
+}
