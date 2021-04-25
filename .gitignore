@@ -1,4 +1,8 @@
 /node_modules/
 /dist
 /screenshots/
-/downloads/
+
+/downloads/*
+!/downloads/.gitkeep
+
+/scrapper-config.json
