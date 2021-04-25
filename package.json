@@ -8,7 +8,7 @@
     "build": "npx tsc",
     "start": "node ./dist/main.js"
   },
-  "author": "",
+  "author": "Lucas Gomes",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
