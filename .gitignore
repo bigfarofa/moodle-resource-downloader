@@ -3,7 +3,7 @@
 /screenshots/
 
 
-scrapper-config.json
+
 
 /downloads/*
 !/downloads/.gitkeep
