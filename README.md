@@ -4,6 +4,10 @@
 Web scrapper built with [Puppeteer](https://developers.google.com/web/tools/puppeteer/) and Typescript, with its focus being downloading moodle resources.
 
 
+## Why?
+I made this because I needed to download a lot of resources and automating the process seemed a fun way to learn about web scraping.
+
+
 ## DISCLOSURE
 This scrapper was developed based on the interface of a education institution that I'm part of. So it might not work on yours.
 
