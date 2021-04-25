@@ -2,7 +2,9 @@
 /dist
 /screenshots/
 
+
+scrapper-config.json
+
 /downloads/*
 !/downloads/.gitkeep
 
-/scrapper-config.json
