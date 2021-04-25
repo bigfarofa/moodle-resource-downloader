@@ -1,7 +1,7 @@
 {
-  "name": "mooodle-scapper",
+  "name": "mooodle-resource-downloader",
   "version": "0.2.0",
-  "description": "Puppeteer crawler o download moodle's resources",
+  "description": "Puppeteer scrapper to download moodle's resources",
   "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
