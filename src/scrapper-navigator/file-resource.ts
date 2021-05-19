@@ -82,12 +82,11 @@ export async function downloadFileResource(page: PageExtended, fileResource: Fil
   console.log("OPTIONS", options)
   //console.log("Axios res", response);
   let data = response.data;
-  console.log("DATA LENGTH", data.length);
   console.log("RESPONSE HEADERS", response.headers);
   console.log("IS BUFFER", Buffer.isBuffer(data));
 
   if (!(Buffer.isBuffer(data))) {
-    console.log("DATA IS NOT BUFFER", data);
+    console.error("DATA IS NOT BUFFER", data);
     return;
   } else {
     console.log("DATA IS BUFFER");
@@ -95,11 +94,11 @@ export async function downloadFileResource(page: PageExtended, fileResource: Fil
 
   let filePath = path.join(downloadPath, replaceReservedDirectoryCharacters(fileResource.name));
   console.log("File Resource FilePath", filePath);
-  if (fs.existsSync(filePath) === false) {
-    //data.pipe(fs.createWriteStream(filePath))
-    fs.writeFileSync(filePath, data, {encoding: "utf8"});
-  }
-  console.log("FILE Downloaded", fileResource.url, filePath);
+  fs.writeFileSync(filePath, data, {encoding: "utf8"});
+  console.log("::: FILE RESOURCE DOWNLOADED :::");
+  console.log("url:", fileResource.url);
+  console.log("path:", filePath);
+  console.log("::::::::::::::::::::::::::::::::");
 
 }
 
