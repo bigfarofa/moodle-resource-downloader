@@ -48,6 +48,10 @@ export async function downloadFolderFormResource(page: Page, folderFormResource:
     options.headers["Accept"] = "*/*";
     options.headers["Connection"] = "keep-alive";
 
+    console.log("AXIOS FORM OPTIONS", options);
+
+    
+
     await page.setRequestInterception(false);
     try {
       console.log("Submitting Form submission as request...", options);
