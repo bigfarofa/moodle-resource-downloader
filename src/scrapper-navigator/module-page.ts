@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import getFileNameFromContentDisposition from '../utils/get-filename-from-content-disposition';
 import mime from 'mime-types';
-import {FileResource, downloadFileResource, evaluateFileResources} from './file-resource';
+import {FileResource, downloadFileResource, evaluateFileResources, PageExtended} from './file-resource';
 import {FolderFormResource, downloadFolderFormResource, evaluateFolderFormResources} from './folder-form-resource';
 import {replaceReservedDirectoryCharacters, labelizeInteger} from '../utils/string-utils';
 
@@ -83,7 +83,7 @@ export class ModulePage {
         let sectionName: string | null = "";
         let sectionNameDiv = sectionDiv.querySelector(".sectionname");
         let documentATags = Array.from(sectionDiv.querySelectorAll(".aalink"));
-        let activityFoldersDOMNodes = Array.from(sectionDiv.querySelectorAll(".activity.folder.modtype_folder .fp-filename-icon a"));
+        let activityFoldersDOMNodes = Array.from(sectionDiv.querySelectorAll(".foldertree .fp-filename-icon a"));
 
         let sectionLocalDirectory = null;
         if (sectionNameDiv) {
@@ -180,7 +180,7 @@ export class ModulePage {
                 url: sectionResource.url
               }
               try {
-                await downloadFileResource(page, fileResource, sectionDirectoryPath);
+                await downloadFileResource(page as PageExtended, fileResource, sectionDirectoryPath);
                 
               } catch (e) {
                 console.error(e);

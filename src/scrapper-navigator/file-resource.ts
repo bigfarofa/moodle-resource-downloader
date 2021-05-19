@@ -3,19 +3,56 @@ import axios, {AxiosRequestConfig} from 'axios';
 import fs from 'fs';
 import path from 'path';
 import {replaceReservedDirectoryCharacters} from '../utils/string-utils'
+import asyncTimeout from "../utils/async-timeout";
 
+
+export interface PageExtended extends Page{
+  _client?: any;
+}
 export interface FileResource {
   url: string;
   name: string;
 }
 
+function goToAndIntercept(url: string, page: PageExtended) : Promise<Request>{
 
-export async function downloadFileResource(page: Page, fileResource: FileResource, downloadPath: string) {
+  return new Promise((resolve, reject) => {
+
+    page.on('request', interceptedRequest => {
+
+      // Only resolve when the redirects are done and the page reaches the target url
+      if (interceptedRequest.url() === url) {
+        interceptedRequest.abort();     //stop intercepting requests
+        page.removeAllListeners("request");
+        resolve(interceptedRequest);
+      }
+    });
+    page.goto(url)
+    .catch((err) => {
+      console.error("goToAndIntercept", err);
+    })
+
+  })
+
+}
+export async function downloadFileResource(page: PageExtended, fileResource: FileResource, downloadPath: string) {
   await page.setRequestInterception(true);
 
+
+  let cookies = await page.cookies();
+  var dataCookies = await page._client.send('Network.getAllCookies');
+
+
+  //console.log("dataCookies", dataCookies);
+
+  console.log("FILE RESOURCE", fileResource);
+  console.log("CURRENT PAGE URL", await page.url());
+
+  const xRequest = await goToAndIntercept(fileResource.url, page);
+  /*
   page.goto(fileResource.url)
   .catch((err) => {
-    console.error(err);
+    console.error("FILE RESOURCE", err);
   })
 
   const xRequest = await new Promise<Request>(resolve => {
@@ -24,38 +61,51 @@ export async function downloadFileResource(page: Page, fileResource: FileResourc
         resolve(interceptedRequest);
     });
   });
-
+  */
   
-  let cookies = await page.cookies();
   const options : AxiosRequestConfig = {
-    //responseType: 'arraybuffer',
+    responseType: 'arraybuffer',
     method: xRequest.method(),
     url: xRequest.url(),
     data: xRequest.postData(),
-    headers: xRequest.headers()
+    headers: xRequest.headers(),
+    maxRedirects: 10
   }
-  options.headers["Cookie"] = cookies.map((ck) => ck.name + '=' + ck.value).join(';');
+
+  console.log("AXIOS FILE OPTIONS", options);
+  
+
+  options.headers["Cookie"] = dataCookies.cookies.map((ck:any) => ck.name + '=' + ck.value).join(';'); //cookies.map((ck) => ck.name + '=' + ck.value).join(';');
   await page.setRequestInterception(false);
 
   const response = await axios(options);
   console.log("OPTIONS", options)
   //console.log("Axios res", response);
   let data = response.data;
-  //console.log(data);
+  console.log("RESPONSE HEADERS", response.headers);
+  console.log("IS BUFFER", Buffer.isBuffer(data));
+
+  if (!(Buffer.isBuffer(data))) {
+    console.error("DATA IS NOT BUFFER", data);
+    return;
+  } else {
+    console.log("DATA IS BUFFER");
+  }
 
   let filePath = path.join(downloadPath, replaceReservedDirectoryCharacters(fileResource.name));
   console.log("File Resource FilePath", filePath);
-  if (fs.existsSync(filePath) === false) {
-    fs.writeFileSync(filePath, data);
-  }
-  console.log("FILE Downloaded", fileResource.url, filePath);
+  fs.writeFileSync(filePath, data, {encoding: "utf8"});
+  console.log("::: FILE RESOURCE DOWNLOADED :::");
+  console.log("url:", fileResource.url);
+  console.log("path:", filePath);
+  console.log("::::::::::::::::::::::::::::::::");
 
 }
 
 export async function evaluateFileResources(page: Page) : Promise<FileResource[]>{
   return await page.evaluate(function(){
     let tempSingleRealFilesInfo: FileResource[] = [];
-    let singleFileDoms = document.querySelectorAll("#region-main a");
+    let singleFileDoms = document.querySelectorAll(".resourceworkaround a");
 
     if (singleFileDoms) {
       let mainATags = Array.from(singleFileDoms);

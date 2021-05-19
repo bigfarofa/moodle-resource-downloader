@@ -113,6 +113,7 @@ async function execute() : Promise<void>{
     let modulesToDownload: ModulePage[] = [];
     while (wrongModuleSelection || !confirmedChoice) {
       wrongModuleSelection = false;
+      modulesToDownload = [];
       let moduleSelection = await prompts({
         type: 'text',
         name: 'moduleChoices',

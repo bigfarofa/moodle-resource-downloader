@@ -19,24 +19,33 @@ interface DownloadFolderFormResourceConfig {
   folderNameType: "resource_page_name" | "resource_download_name"
 }
 
+function interceptButtonClick(buttonSelector: string, page: Page) : Promise<Request>{
+  return new Promise((resolve, reject) => {
+
+    page.once('request', interceptedRequest => {
+
+      interceptedRequest.abort();     //stop intercepting requests
+      resolve(interceptedRequest);
+    });
+
+    page.click(buttonSelector)
+    .catch((err) => {
+      console.error("interceptButtonClick click error", err);
+    })
+  })
+}
+
 export async function downloadFolderFormResource(page: Page, folderFormResource: FolderFormResource, downloadPath: string, config: DownloadFolderFormResourceConfig){
   if (folderFormResource.submitButtonId) {
 
     await page.setRequestInterception(true);
-    page.click("#" + folderFormResource.submitButtonId)
-    .catch((err) => {
-      console.error(err);
-    })
 
-    const xRequest = await new Promise<Request>(resolve => {
-      page.once('request', interceptedRequest => {
-          interceptedRequest.abort();     //stop intercepting requests
-          resolve(interceptedRequest);
-      });
-    });
-    
+
+    const xRequest = await interceptButtonClick("#" + folderFormResource.submitButtonId, page);
+    let currentPageUrl = page.url();
     
     const options: AxiosRequestConfig = {
+      responseType: "arraybuffer",
       method: xRequest.method(),
       url: folderFormResource.action,
       data: xRequest.postData(),
@@ -47,6 +56,10 @@ export async function downloadFolderFormResource(page: Page, folderFormResource:
     options.headers["Accept-Encoding"] = "gzip, deflate, br";
     options.headers["Accept"] = "*/*";
     options.headers["Connection"] = "keep-alive";
+
+    console.log(`FORM RESOURCE [${currentPageUrl}] REQUEST CONFIG`, options);
+
+    
 
     await page.setRequestInterception(false);
     try {
@@ -68,17 +81,23 @@ export async function downloadFolderFormResource(page: Page, folderFormResource:
 
       let localFilePath = path.join(downloadPath, fileName);
 
-      console.log("Form File Resource FilePath", localFilePath);
+      //console.log("Form File Resource FilePath", localFilePath);
       //test
 
-      if (fs.existsSync(localFilePath) === false) {
-        fs.writeFileSync(localFilePath, response.data);
-      }
-      console.log("FILE SUCCESS Downloaded", localFilePath);
+      
+      fs.writeFileSync(localFilePath, response.data);
+      
+
+      console.log("::: FOLDER RESOURCE DOWNLOADED :::");
+      console.log("url:", currentPageUrl);
+      console.log("pageName:", folderFormResource.pageName);
+      console.log("action:", folderFormResource.action);
+      console.log("path:", localFilePath);
+      console.log("::::::::::::::::::::::::::::::::");
       
 
     } catch (e) {
-      console.error("Submitting Form submission as request...Error");
+      console.error("Submitting Form as request...Error");
       console.error(e);
       
     }

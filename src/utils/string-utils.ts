@@ -1,5 +1,5 @@
 export function replaceReservedDirectoryCharacters(str: string, replaceBy: string = ""){
-  return str.replace(new RegExp(/[\/\\]/g), replaceBy);
+  return str.replace(new RegExp(/[\/\\\:\*\?\~]/g), replaceBy);
 }
 
 
