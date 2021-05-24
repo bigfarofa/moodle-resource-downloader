@@ -47,6 +47,7 @@ export default class UserPasswAuth implements IAuthProcess {
 
     let password = config.password;
 
+    console.log("[WARNING] If you're using 2 Factor Authentication, remember to check your phone for any prompts.");
     await this.page.goto(config.authorizeUrl);
     await this.page.screenshot({path: './screenshots/login.png'});
     console.log("Login Page entered")
