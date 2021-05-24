@@ -1,14 +1,7 @@
-export interface IScrapperNavigatorOptions {
-  username?: string;
-  modulesPages?: string;
-}
+
 
 export interface AuthenticateConfig {
-  username: string;
-  password: string;
   authorizeUrl: string;
-  goToPageAfterLogin?: string;
-  waitForPageAfterLogin?: string;
 }
 
 

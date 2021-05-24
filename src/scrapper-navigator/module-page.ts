@@ -15,11 +15,7 @@ import asyncTimeout from '../utils/async-timeout';
 
 import {
   ModulePageSection,
-  ModuleLink,
   ModulePageInfo,
-  DownloadResourcesConfig,
-  IScrapperNavigatorOptions,
-  AuthenticateConfig,
   SectionResource,
   ModulePageDonwloadResourcesConfig
 } from './types';

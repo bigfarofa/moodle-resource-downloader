@@ -5,13 +5,16 @@ import path from 'path';
 import mime from 'mime-types';
 import prompts from 'prompts';
 
-import {ScrapperConfig} from './types';
+import {EnumAuthMethod, IScrapperConfig} from './IScrapperConfig';
 import {escapeRegExpSpecialCharacters} from './utils/string-utils';
 import * as scriptUtils from './utils/script-utils';
 import ScrapperNavigator from './scrapper-navigator';
+import UserPasswAuth from './scrapper-navigator/authenticators/UserPasswAuth';
+import UserControlAuth from './scrapper-navigator/authenticators/UserControlAuth';
 import { ModulePage } from './scrapper-navigator/module-page';
+import IAuthProcess from './scrapper-navigator/authenticators/IAuthProcess';
 
-let scrapperConfig: ScrapperConfig = {};
+let scrapperConfig: IScrapperConfig = {};
 
 let scrapperConfigDir = "./scrapper-config.json";
 
@@ -29,65 +32,94 @@ if(fs.existsSync(scrapperConfigDir)){
 
 
 async function execute() : Promise<void>{
-  let userEmail = "";
+  let userEmail: string | undefined = undefined;
   
   let defaultDownloadPath = __dirname + "/../downloads";
   let downloadPathInConfig = scrapperConfig.downloadPath || undefined;
   let resourcesDownloadPath = getArgParam("--download-path") || downloadPathInConfig || defaultDownloadPath;
-
-  if (scrapperConfig.username) {
-    userEmail = scrapperConfig.username;
-  } else if (getArgParam("--username")) {
-    userEmail = getArgParam("--username") as string;
-  } else {
-    let userResponse = await prompts({
-      type: 'text',
-      name: 'username',
-      message: `Username:`
-    })
-    userEmail = userResponse.username;
-  }
-
-  let passwdResponse = await prompts({
-    type: 'password',
-    name: 'password',
-    message: 'Password'
-  });
-
-
-  let userPassword = passwdResponse.password;
-
-  if (!userEmail) {
-    throw new Error("USERNAME IS REQUIRED");
-  }
-
-  if (!userPassword) {
-    throw new Error("PASSWORD IS REQUIRED");
-  }
-
-  
-  
-  const browser = await puppeteer.launch({
-    headless: !hasArg("--no-headless"),
-    product: "chrome"
-  });
-
-
-  const page = await browser.newPage();
-
-  let scrapperNavigator = new ScrapperNavigator(page);
-
+  let authMethod = getArgParam("--auth-method") || scrapperConfig.authMethod || EnumAuthMethod.USER_CONTROL;
   let authorizeUrl = getArgParam("--authorize-url") || scrapperConfig.authorizeUrl;
   let waitForPageAfterLogin = getArgParam("--wait-page-after-login") || scrapperConfig.waitPageAfterLogin;
   if (!authorizeUrl) {
     throw new Error("Authorization URL not provided.")
   }
-  await scrapperNavigator.authenticate({
-    authorizeUrl: authorizeUrl,
-    username: userEmail,
-    password: userPassword,
-    waitForPageAfterLogin: waitForPageAfterLogin
+
+  let isHeadless = true;
+  if (hasArg("--no-headless")) {
+    isHeadless = false;
+  } else if (authMethod === EnumAuthMethod.USER_CONTROL) {
+    isHeadless = false;
+  }
+  const browser = await puppeteer.launch({
+    headless: isHeadless,
+    product: "chrome",
+    timeout: 90000
   });
+
+
+  const page = await browser.newPage();
+
+  let authenticator: IAuthProcess | undefined = undefined;
+
+  
+  if (authMethod === EnumAuthMethod.TERMINAL_USER_PASSW) {
+    if (scrapperConfig.username) {
+      userEmail = scrapperConfig.username;
+    } else if (getArgParam("--username")) {
+      userEmail = getArgParam("--username") as string;
+    } else {
+      let userResponse = await prompts({
+        type: 'text',
+        name: 'username',
+        message: `Username:`
+      })
+      userEmail = userResponse.username;
+    }
+  
+    let passwdResponse = await prompts({
+      type: 'password',
+      name: 'password',
+      message: 'Password'
+    });
+  
+  
+    let userPassword = passwdResponse.password;
+  
+    if (!userEmail) {
+      throw new Error("USERNAME IS REQUIRED");
+    }
+  
+    if (!userPassword) {
+      throw new Error("PASSWORD IS REQUIRED");
+    }
+
+    
+    
+
+    authenticator = new UserPasswAuth(page, {
+      authorizeUrl: authorizeUrl,
+      username: userEmail,
+      password: userPassword,
+      waitForPageAfterLogin: waitForPageAfterLogin
+    });
+
+  } else {
+
+    userEmail = getArgParam("--username") || scrapperConfig.username;
+    authenticator = new UserControlAuth(page, {
+      username: userEmail,
+      authorizeUrl: authorizeUrl,
+      waitForPageAfterLogin: waitForPageAfterLogin
+    });
+  }
+
+  
+
+
+  
+  let scrapperNavigator = new ScrapperNavigator(page, {authenticator: authenticator});
+
+  await scrapperNavigator.authenticate();
 
   console.log("AUTHENTICATION DONE")
 

@@ -11,7 +11,12 @@ I made this because I needed to download a lot of resources and automating the p
 ## DISCLOSURE
 This scrapper was developed based on the interface of a education institution that I'm part of. So it might not work on yours.
 
+## Pre-Requisites
+Before installing the scrapper, you will need the following:
 
+
+You will need to have Node.js installed. A version of grater or equal to `v12.x`.
+You can download here: [https://nodejs.org/en/](https://nodejs.org/en/)
 ## Installation
 
 - Install the dependencies: `npm install`
@@ -29,7 +34,19 @@ There is no `scrapper-config.json` because private information might be present 
 If there there is a option that is present in both command line and configuration file, the CLI flag and JSON parameter will be seperated by a `|`.
 
 - `--username <moodle-login-username>` | `username` The username you use to login
-- `--download-path <path>` | `downloadPath` The path where the resources will be downloaded(By default it's the `./downloads` folder)
-- `--no-headless` When this flag is on, Puppeteer will be executed with the option with the headless mode deactivated.
+- `--download-path <path>` | `downloadPath` The path where the resources will be downloaded(By default it's the `./downloads` folder located in the root of the project)
+- `--no-headless` When this flag is on, Puppeteer will be executed with the option with the headless mode deactivated. Headless mode allows the scrapper to run without displaying the UI. 
 - `--wait-page-after-login | waitPageAfterLogin` - What page should the scrapper wait after authenticating.
+- `--auth-method` | `authMethod` - It can have one of the following values: `"user-control"`, `"terminal-user-passw"`. Default `user-control`
 
+
+- - `user-control` allows you to insert your username and password in the browser's page like an usual login procedure.
+It's useful if you don't want to input your credentials in the terminal, to see the scrapper steps, and if for some reason the authentication requires more input than just password and username.
+Only disadvantage is that the UI will need to be displayed, which requires the headless mode to be disabled.
+
+
+- - `terminal-user-passw` The username and password will be prompted by the terminal. Doing this way allows the scrapper/puppeteer to run in headless mode(or not with the flag `--no-headless`)
+- - If you want to use `terminal-user-passw`, it can also be run with the shortcut: `npm run start:auth-terminal`
+
+
+- - I prefer using `terminal-user-passw` because the UI does not provide much information, it will be mostly noise. Microsoft 2FA does not require extra input, just confirmation on the phone.
