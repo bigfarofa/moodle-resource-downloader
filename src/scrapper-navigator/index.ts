@@ -6,29 +6,35 @@ import path from 'path';
 
 import {
   ModuleLink,
-  IScrapperNavigatorOptions,
-  AuthenticateConfig,
   ModulePageDonwloadResourcesConfig
 } from './types';
 
-import UserPasswAuth from './authenticators/UserPasswAuth';
+import UserPasswAuth, {IUserPasswAuthenticateConfig} from './authenticators/UserPasswAuth';
+import IAuthProcess from './authenticators/IAuthProcess';
+export interface IScrapperNavigatorOptions {
+  modulesPages?: string;
+  authenticator: IAuthProcess
+}
 
 
 export class ScrapperNavigator extends EventEmitter {
 
-  config?: IScrapperNavigatorOptions = {};
+  config: IScrapperNavigatorOptions;
   page: Page;
   modulesPages: ModulePage[] = []
 
-  constructor(page: Page, config?: IScrapperNavigatorOptions){
+  constructor(page: Page, config: IScrapperNavigatorOptions){
     super()
     this.config = config;
     this.page = page;
   }
 
-  async authenticate(config: AuthenticateConfig) : Promise<void> {
-    let userAuth = new UserPasswAuth(this.page, config);
-    return userAuth.authenticate();
+  async authenticate() : Promise<void> {
+    return this.config.authenticator.authenticate();
+  }
+
+  setAuthenticator(auth: IAuthProcess){
+    this.config.authenticator = auth;
   }
 
 

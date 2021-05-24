@@ -3,15 +3,26 @@ import {AuthenticateConfig} from '../types';
 import { Page } from 'puppeteer';
 import asyncTimeout from '../../utils/async-timeout';
 
+
+export interface IUserPasswAuthenticateConfig extends AuthenticateConfig {
+  username: string;
+  password: string;
+  goToPageAfterLogin?: string;
+  waitForPageAfterLogin?: string;
+}
+
+
+
 /**
  * Inputs user and password in the name of the user.
  * If the login requires 2 Factor authenticatication,
  * it might be useful to run the script in non-headless mode.
+ * 
  */
 export default class UserPasswAuth implements IAuthProcess {
   page: Page;
-  config: AuthenticateConfig;
-  constructor(page: Page, config: AuthenticateConfig) {
+  config: IUserPasswAuthenticateConfig;
+  constructor(page: Page, config: IUserPasswAuthenticateConfig) {
     this.page = page;
     this.config = config;
   }
