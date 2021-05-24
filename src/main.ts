@@ -37,7 +37,7 @@ async function execute() : Promise<void>{
   let defaultDownloadPath = __dirname + "/../downloads";
   let downloadPathInConfig = scrapperConfig.downloadPath || undefined;
   let resourcesDownloadPath = getArgParam("--download-path") || downloadPathInConfig || defaultDownloadPath;
-  let authMethod = getArgParam("--auth-method") || scrapperConfig.authMethod || "user-control";
+  let authMethod = getArgParam("--auth-method") || scrapperConfig.authMethod || EnumAuthMethod.TERMINAL_USER_PASSW;
   let authorizeUrl = getArgParam("--authorize-url") || scrapperConfig.authorizeUrl;
   let waitForPageAfterLogin = getArgParam("--wait-page-after-login") || scrapperConfig.waitPageAfterLogin;
   if (!authorizeUrl) {
@@ -53,7 +53,7 @@ async function execute() : Promise<void>{
   const browser = await puppeteer.launch({
     headless: isHeadless,
     product: "chrome",
-    timeout: 70000
+    timeout: 90000
   });
 
 
