@@ -1,5 +1,5 @@
-import { Page, Request} from "puppeteer";
-import axios, {AxiosRequestConfig} from 'axios';
+import { Page, HTTPRequest} from "puppeteer";
+import axios, {AxiosRequestConfig, Method as AxiosMethod} from 'axios';
 import fs from 'fs';
 import path from 'path';
 import {replaceReservedDirectoryCharacters} from '../utils/string-utils'
@@ -14,7 +14,8 @@ export interface FileResource {
   name: string;
 }
 
-function goToAndIntercept(url: string, page: PageExtended) : Promise<Request>{
+
+function goToAndIntercept(url: string, page: PageExtended) : Promise<HTTPRequest>{
 
   return new Promise((resolve, reject) => {
 
@@ -40,7 +41,8 @@ export async function downloadFileResource(page: PageExtended, fileResource: Fil
 
 
   let cookies = await page.cookies();
-  var dataCookies = await page._client.send('Network.getAllCookies');
+  let client = await page.target().createCDPSession();
+  var dataCookies = await client.send('Network.getAllCookies');
 
 
   //console.log("dataCookies", dataCookies);
@@ -65,7 +67,7 @@ export async function downloadFileResource(page: PageExtended, fileResource: Fil
   
   const options : AxiosRequestConfig = {
     responseType: 'arraybuffer',
-    method: xRequest.method(),
+    method: xRequest.method() as AxiosMethod,
     url: xRequest.url(),
     data: xRequest.postData(),
     headers: xRequest.headers(),

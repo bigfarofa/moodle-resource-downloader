@@ -1,5 +1,5 @@
-import { Page, Request} from "puppeteer";
-import axios, {AxiosRequestConfig} from 'axios';
+import { Page, HTTPRequest} from "puppeteer";
+import axios, {AxiosRequestConfig, Method as AxiosMethod} from 'axios';
 import getFileNameFromContentDisposition from '../utils/get-filename-from-content-disposition';
 import fs from 'fs';
 import path from 'path';
@@ -19,7 +19,7 @@ interface DownloadFolderFormResourceConfig {
   folderNameType: "resource_page_name" | "resource_download_name"
 }
 
-function interceptButtonClick(buttonSelector: string, page: Page) : Promise<Request>{
+function interceptButtonClick(buttonSelector: string, page: Page) : Promise<HTTPRequest>{
   return new Promise((resolve, reject) => {
 
     page.once('request', interceptedRequest => {
@@ -46,7 +46,7 @@ export async function downloadFolderFormResource(page: Page, folderFormResource:
     
     const options: AxiosRequestConfig = {
       responseType: "arraybuffer",
-      method: xRequest.method(),
+      method: xRequest.method() as AxiosMethod,
       url: folderFormResource.action,
       data: xRequest.postData(),
       headers: xRequest.headers(),
