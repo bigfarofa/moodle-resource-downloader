@@ -7,7 +7,7 @@ import asyncTimeout from '../../utils/async-timeout';
 export interface IUserPasswAuthenticateConfig extends AuthenticateConfig {
   username: string;
   password: string;
-  goToPageAfterLogin?: string;
+  modulesListPage?: string;
   waitForPageAfterLogin?: string;
 }
 
@@ -72,8 +72,8 @@ export default class UserPasswAuth implements IAuthProcess {
     if (config.waitForPageAfterLogin) {
       await this.page.waitForResponse(config.waitForPageAfterLogin);
     }
-    if (config.goToPageAfterLogin) {
-      await this.page.goto(config.goToPageAfterLogin);
+    if (config.modulesListPage) {
+      await this.page.goto(config.modulesListPage);
     }
     console.log("MOODLE PAGE YEAH!");
     return;

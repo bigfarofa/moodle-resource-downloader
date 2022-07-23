@@ -41,7 +41,7 @@ async function execute() : Promise<void>{
   let authMethod = getArgParam("--auth-method") || scrapperConfig.authMethod || EnumAuthMethod.USER_CONTROL;
   let authorizeUrl = getArgParam("--authorize-url") || scrapperConfig.authorizeUrl;
   let waitForPageAfterLogin = getArgParam("--wait-page-after-login") || scrapperConfig.waitPageAfterLogin;
-  let goToPageAfterLogin = getArgParam("--go-page-after-login") || scrapperConfig.goToPageAfterLogin || undefined;
+  let modulesListPage = getArgParam("--modules-list-page") || scrapperConfig.modulesListPage || undefined;
   
 
   if (!authorizeUrl) {
@@ -116,7 +116,7 @@ async function execute() : Promise<void>{
       username: userEmail,
       password: userPassword,
       waitForPageAfterLogin: waitForPageAfterLogin,
-      goToPageAfterLogin: goToPageAfterLogin,
+      modulesListPage: modulesListPage,
     });
 
   } else {
@@ -126,7 +126,7 @@ async function execute() : Promise<void>{
       username: userEmail,
       authorizeUrl: authorizeUrl,
       waitForPageAfterLogin: waitForPageAfterLogin,
-      goToPageAfterLogin: goToPageAfterLogin,
+      modulesListPage: modulesListPage,
     });
   }
 

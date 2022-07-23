@@ -5,7 +5,7 @@ import asyncTimeout from '../../utils/async-timeout';
 
 export interface IUserControlAuthConfig {
   authorizeUrl: string;
-  goToPageAfterLogin?: string;
+  modulesListPage?: string;
   waitForPageAfterLogin?: string;
   username?: string;
 }
@@ -34,8 +34,8 @@ export default class UserControlAuth implements IAuthProcess {
       await this.page.waitForResponse(config.waitForPageAfterLogin);
       //await this.procedureWaitForPageAfterLogin(this.page, config.waitForPageAfterLogin);
     }
-    if (config.goToPageAfterLogin) {
-      await this.page.goto(config.goToPageAfterLogin);
+    if (config.modulesListPage) {
+      await this.page.goto(config.modulesListPage);
     }
     console.log("MOODLE PAGE YEAH!");
   }

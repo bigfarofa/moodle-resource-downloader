@@ -23,7 +23,7 @@ You can download here: [https://nodejs.org/en/](https://nodejs.org/en/)
 - Build the project: `npx tsc`
 
 ## Run configuration
-You can run the scrapper by simply using `npm run start` or `node ./dist/main.js`.
+You can run the scrapper by simply using `npm run start` or `node ./dist/main.js`. Remember to pay attention to the command line for inputs.
 
 There are some run configurations you need to set up. Either via command line and/or configuration file (`scrapper-config.json`).
 
@@ -31,16 +31,17 @@ There are some run configurations you need to set up. Either via command line an
 There is no `scrapper-config.json` because private information might be present there, so create one based on the file: `template-scrapper-config.json`.
 
 ### Config
-If there there is a option that is present in both command line and configuration file, the CLI flag and JSON parameter will be seperated by a `|`. The only required parameter is the `authorizeUrl` parameter.
+If there there is a option that is present in both command line and configuration file, the CLI flag and JSON parameter will be seperated by a `|`. The required parameters are `authorizeUrl`, `waitPageAfterLogin`, `modulesListPage`.
 
 
 - `--authorize-url` | `authorizeUrl` The usual moodle link you use to enter it. Include the protocol(e.g http, https, https://mymoodle.com)
-
+- `--wait-page-after-login | waitPageAfterLogin` - What page should the scrapper wait after authenticating.
+- `--modules-list-page | modulesListPage` - What page contains the list of modules. This scrapper uses the Dashboard as basis to obtain the modules list.
 - `--username <moodle-login-username>` | `username` The username you use to login.
 - `--download-path <path>` | `downloadPath` The path where the resources will be downloaded(By default it's the `./downloads` folder located in the root of the project).
 
 - `--headless` | `headless` When this parameter is set to `true`, Puppeteer will be executed with the option with the [headless mode](https://pptr.dev/api/puppeteer.browserlaunchargumentoptions.headless/) activated. Headless mode allows the scrapper to run without displaying the UI. Default value is `false`. Optional.
-- `--wait-page-after-login | waitPageAfterLogin` - What page should the scrapper wait after authenticating. Optional.
+
 - `--auth-method` | `authMethod` - It can have one of the following values: `"user-control"`, `"terminal-user-passw"`. Default `user-control`
 
 
@@ -54,4 +55,3 @@ Only disadvantage is that the UI will need to be displayed, which requires the h
 - - If you want to use `terminal-user-passw`, it can also be run with the shortcut: `npm run start:auth-terminal`
 
 
-- - I prefer using `terminal-user-passw` because the UI does not provide much information, it will be mostly noise. Microsoft 2FA does not require extra input, just confirmation on the phone.

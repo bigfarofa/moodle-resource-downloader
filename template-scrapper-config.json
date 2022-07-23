@@ -3,6 +3,7 @@
   "downloadPath": "",
   "authorizeUrl": "",
   "waitPageAfterLogin": "",
+  "modulesListPage": "",
   "authMethod": "",
   "headless": false
 }

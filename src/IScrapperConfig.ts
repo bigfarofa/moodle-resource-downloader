@@ -7,7 +7,7 @@ export interface IScrapperConfig {
   downloadPath?: string;
   authorizeUrl?: string;
   waitPageAfterLogin?: string;
-  goToPageAfterLogin?: string;
+  modulesListPage?: string;
   authMethod?: EnumAuthMethod;
   headless?: boolean;
 }
