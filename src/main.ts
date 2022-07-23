@@ -166,7 +166,7 @@ async function execute() : Promise<void>{
       let moduleSelection = await prompts({
         type: 'text',
         name: 'moduleChoices',
-        message: "Select the modules by typing the numbers seperated by commas. E.g 1,5,2:"
+        message: "Select the modules by typing the numbers seperated by commas or by content of their names. E.g 1,5,2,Algorithms:"
       })
       if (moduleSelection.moduleChoices === "exit") {
         throw new Error("REQUESTED_EXIT");
