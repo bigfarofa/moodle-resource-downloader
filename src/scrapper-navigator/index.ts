@@ -1,5 +1,5 @@
 import EventEmitter  from 'events';
-import {Page, ElementHandle, Request} from 'puppeteer';
+import {Page, ElementHandle, HTTPRequest} from 'puppeteer';
 import asyncTimeout from '../utils/async-timeout';
 import {ModulePage} from './module-page';
 import path from 'path';
@@ -41,15 +41,15 @@ export class ScrapperNavigator extends EventEmitter {
   async loadModulesPages(modulesListPageUrl?: string, loadSections: boolean = false) {
     if (modulesListPageUrl) {
       if (this.page.url() !== modulesListPageUrl) {
-        this.page.goto(modulesListPageUrl);
+        await this.page.goto(modulesListPageUrl);
       }
     }
 
 
-    await this.page.screenshot({path: path.join(__dirname, '/../../screenshots/dashboard_moodle_page.png')});
+    //await this.page.screenshot({path: path.join(__dirname, '/../../screenshots/dashboard_moodle_page.png')});
     await this.page.select("#coc-filterterm", "all")
     console.log("Selected All modules");
-    await this.page.screenshot({path: path.join(__dirname, '/../../screenshots/selected_all.png')});
+    //await this.page.screenshot({path: path.join(__dirname, '/../../screenshots/selected_all.png')});
     
 
     
@@ -68,7 +68,7 @@ export class ScrapperNavigator extends EventEmitter {
       });
     })
 
-    let modulesList = tempModulesList.map((e) => new ModulePage({name: e.name, url: e.url, sections: []}));
+    let modulesList = tempModulesList.map((e: ModuleLink) => new ModulePage({name: e.name, url: e.url, sections: []}));
 
     // Load Sections
     if (loadSections) {

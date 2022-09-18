@@ -1,5 +1,5 @@
 
-import {Page, ElementHandle, Request} from 'puppeteer';
+import {Page, ElementHandle, HTTPRequest} from 'puppeteer';
 import axios, { AxiosRequestConfig } from 'axios';
 import path from 'path';
 import fs from 'fs';

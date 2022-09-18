@@ -7,7 +7,7 @@ import asyncTimeout from '../../utils/async-timeout';
 export interface IUserPasswAuthenticateConfig extends AuthenticateConfig {
   username: string;
   password: string;
-  goToPageAfterLogin?: string;
+  modulesListPage?: string;
   waitForPageAfterLogin?: string;
 }
 
@@ -49,11 +49,11 @@ export default class UserPasswAuth implements IAuthProcess {
 
     console.log("[WARNING] If you're using 2 Factor Authentication, remember to check your phone for any prompts.");
     await this.page.goto(config.authorizeUrl);
-    await this.page.screenshot({path: './screenshots/login.png'});
+    //await this.page.screenshot({path: './screenshots/login.png'});
     console.log("Login Page entered")
     await this.page.type('[name="UserName"]', username);
     console.log("Username typed");
-    await this.page.screenshot({path: './screenshots/email_inserted.png'});
+    //await this.page.screenshot({path: './screenshots/email_inserted.png'});
     await asyncTimeout(1000);
     await this.page.click("#nextButton");
     await this.page.waitForSelector("#passwordInput", {
@@ -61,10 +61,10 @@ export default class UserPasswAuth implements IAuthProcess {
     });
     await asyncTimeout(1000);
     console.log("PAssword input is visible");
-    await this.page.screenshot({path: './screenshots/submitted_username.png'});
-    await this.page.type('#passwordInput', password);
+    //await this.page.screenshot({path: './screenshots/submitted_username.png'});
+    //await this.page.type('#passwordInput', password);
     console.log("PAssword input inputted");
-    await this.page.screenshot({path: './screenshots/password_filled.png'});
+    //await this.page.screenshot({path: './screenshots/password_filled.png'});
     await asyncTimeout(1000);
     await this.page.click("#submitButton");
     console.log("Form submitted");
@@ -72,8 +72,8 @@ export default class UserPasswAuth implements IAuthProcess {
     if (config.waitForPageAfterLogin) {
       await this.page.waitForResponse(config.waitForPageAfterLogin);
     }
-    if (config.goToPageAfterLogin) {
-      await this.page.goto(config.goToPageAfterLogin);
+    if (config.modulesListPage) {
+      await this.page.goto(config.modulesListPage);
     }
     console.log("MOODLE PAGE YEAH!");
     return;

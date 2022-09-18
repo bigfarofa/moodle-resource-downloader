@@ -15,7 +15,7 @@
     "axios": "^0.21.1",
     "mime-types": "^2.1.28",
     "prompts": "^2.4.0",
-    "puppeteer": "^5.5.0",
+    "puppeteer": "^15.5.0",
     "qs": "^6.9.6"
   },
   "devDependencies": {

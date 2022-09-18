@@ -37,27 +37,42 @@ async function execute() : Promise<void>{
   let defaultDownloadPath = __dirname + "/../downloads";
   let downloadPathInConfig = scrapperConfig.downloadPath || undefined;
   let resourcesDownloadPath = getArgParam("--download-path") || downloadPathInConfig || defaultDownloadPath;
+  let fullResourcesDownloadPath = path.resolve(resourcesDownloadPath)
   let authMethod = getArgParam("--auth-method") || scrapperConfig.authMethod || EnumAuthMethod.USER_CONTROL;
   let authorizeUrl = getArgParam("--authorize-url") || scrapperConfig.authorizeUrl;
   let waitForPageAfterLogin = getArgParam("--wait-page-after-login") || scrapperConfig.waitPageAfterLogin;
+  let modulesListPage = getArgParam("--modules-list-page") || scrapperConfig.modulesListPage || undefined;
+  
+
   if (!authorizeUrl) {
     throw new Error("Authorization URL not provided.")
   }
 
-  let isHeadless = true;
-  if (hasArg("--no-headless")) {
-    isHeadless = false;
-  } else if (authMethod === EnumAuthMethod.USER_CONTROL) {
-    isHeadless = false;
+  let cliArgHeadless = getArgParam("--headless");
+  let isHeadless = false;
+  if (cliArgHeadless && cliArgHeadless === "true") {
+    isHeadless = true
+  } else if (typeof scrapperConfig.headless === "boolean"){
+    isHeadless = scrapperConfig.headless;
   }
+
+  if (authMethod === EnumAuthMethod.USER_CONTROL) {
+    isHeadless = false;
+    console.log("Warning: disabling headless mode due to Auth Method being 'user-control'");
+  }
+
+  const responseTimeout = 1800000;
   const browser = await puppeteer.launch({
     headless: isHeadless,
     product: "chrome",
-    timeout: 90000
+    timeout: responseTimeout
   });
 
 
   const page = await browser.newPage();
+
+  page.setDefaultTimeout(responseTimeout);
+  page.setDefaultNavigationTimeout(responseTimeout);
 
   let authenticator: IAuthProcess | undefined = undefined;
 
@@ -100,7 +115,8 @@ async function execute() : Promise<void>{
       authorizeUrl: authorizeUrl,
       username: userEmail,
       password: userPassword,
-      waitForPageAfterLogin: waitForPageAfterLogin
+      waitForPageAfterLogin: waitForPageAfterLogin,
+      modulesListPage: modulesListPage,
     });
 
   } else {
@@ -109,7 +125,8 @@ async function execute() : Promise<void>{
     authenticator = new UserControlAuth(page, {
       username: userEmail,
       authorizeUrl: authorizeUrl,
-      waitForPageAfterLogin: waitForPageAfterLogin
+      waitForPageAfterLogin: waitForPageAfterLogin,
+      modulesListPage: modulesListPage,
     });
   }
 
@@ -149,7 +166,7 @@ async function execute() : Promise<void>{
       let moduleSelection = await prompts({
         type: 'text',
         name: 'moduleChoices',
-        message: "Select the modules by typing the numbers seperated by commas. E.g 1,5,2:"
+        message: "Select the modules by typing the numbers seperated by commas or by content of their names. E.g 1,5,2,Algorithms:"
       })
       if (moduleSelection.moduleChoices === "exit") {
         throw new Error("REQUESTED_EXIT");
@@ -201,7 +218,7 @@ async function execute() : Promise<void>{
           console.log(" =>", moduleDoc.name);
         }
         
-        console.log("\nDownloads folder targeted at:", resourcesDownloadPath);
+        console.log("\nDownloads folder targeted at:", fullResourcesDownloadPath);
         let confirmChoiceInput = "";
         while (["y", "n"].indexOf(confirmChoiceInput.toLowerCase()) === -1) {
           let promptInput = await prompts({
