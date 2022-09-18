@@ -9,7 +9,7 @@ Web scrapper built with [Puppeteer](https://developers.google.com/web/tools/pupp
 I made this because I needed to download a lot of resources and automating the process seemed a fun way to learn about web scraping.
 
 ## DISCLOSURE
-This scrapper was developed based on the interface of a education institution that I'm part of. So it might not work on yours.
+This scrapper was developed based on the interface of a education institution that I was part of. So it might not work on yours.
 
 ## Pre-Requisites
 Before installing the scrapper, you will need the following:
