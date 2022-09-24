@@ -134,7 +134,10 @@ async function execute() : Promise<void>{
 
 
   
-  let scrapperNavigator = new ScrapperNavigator(page, {authenticator: authenticator});
+  let scrapperNavigator = new ScrapperNavigator(page, {
+    authenticator: authenticator,
+    modulesPages: modulesListPage
+  });
 
   await scrapperNavigator.authenticate();
 
