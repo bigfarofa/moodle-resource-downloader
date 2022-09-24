@@ -39,9 +39,10 @@ export class ScrapperNavigator extends EventEmitter {
 
 
   async loadModulesPages(modulesListPageUrl?: string, loadSections: boolean = false) {
-    if (modulesListPageUrl) {
-      if (this.page.url() !== modulesListPageUrl) {
-        await this.page.goto(modulesListPageUrl);
+    let _modulesListPageUrl = modulesListPageUrl || this.config.modulesPages;
+    if (_modulesListPageUrl) {
+      if (this.page.url() !== _modulesListPageUrl) {
+        await this.page.goto(_modulesListPageUrl);
       }
     }
 
