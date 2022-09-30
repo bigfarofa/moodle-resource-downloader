@@ -122,6 +122,7 @@ async function execute() : Promise<void>{
   } else {
 
     userEmail = getArgParam("--username") || scrapperConfig.username;
+    userEmail = undefined; // Disabled due to Puppeteer Error
     authenticator = new UserControlAuth(page, {
       username: userEmail,
       authorizeUrl: authorizeUrl,
@@ -169,7 +170,7 @@ async function execute() : Promise<void>{
       let moduleSelection = await prompts({
         type: 'text',
         name: 'moduleChoices',
-        message: "Select the modules by typing the numbers seperated by commas or by content of their names. E.g 1,5,2,Algorithms:"
+        message: "Select the modules by typing the numbers or by content of their names, seperated by commas. E.g: 1,5,2,Algorithms,Physics:"
       })
       if (moduleSelection.moduleChoices === "exit") {
         throw new Error("REQUESTED_EXIT");
