@@ -1,0 +1,9 @@
+{
+  "username": "",
+  "downloadPath": "",
+  "authorizeUrl": "https://moodlecurrent.gre.ac.uk/auth/oidc/",
+  "waitPageAfterLogin": "https://moodlecurrent.gre.ac.uk/my/",
+  "modulesListPage": "https://moodlecurrent.gre.ac.uk/my/",
+  "authMethod": "",
+  "headless": false
+}
