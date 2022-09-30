@@ -22,27 +22,38 @@ You can download here: [https://nodejs.org/en/](https://nodejs.org/en/)
 - Install the dependencies: `npm install`
 - Build the project: `npx tsc`
 
+## Configuration
+
+There are some run configurations you need to set up. Either via command line and/or configuration file (`/scrapper-config.json`).
+
+There is no `scrapper-config.json` because private information might be present there, so create one based on the file: `template-scrapper-config.json`
+
+### Configuration Templates:
+
+Configuration templates are present in the folder: `scrapper-configs`.
+
+For example if you are using Greenwich's moodle, just create a `scrapper-config` with the contents of `scrapper-configs/scrapper-config-greenwich.json`
+
+Templates available:
+- Greenwich: `scrapper-configs/scrapper-config-greenwich.json`
+
+
 ## Run configuration
 You can run the scrapper by simply using `npm run start` or `node ./dist/main.js`. Remember to pay attention to the command line for inputs.
 
-There are some run configurations you need to set up. Either via command line and/or configuration file (`scrapper-config.json`).
-
-
-There is no `scrapper-config.json` because private information might be present there, so create one based on the file: `template-scrapper-config.json`.
-
-### Config
+## Configuration Parameters
 If there there is a option that is present in both command line and configuration file, the CLI flag and JSON parameter will be seperated by a `|`. The required parameters are `authorizeUrl`, `waitPageAfterLogin`, `modulesListPage`.
 
 
-- `--authorize-url` | `authorizeUrl` The usual moodle link you use to enter it. Include the protocol(e.g http, https, https://mymoodle.com)
-- `--wait-page-after-login | waitPageAfterLogin` - What page should the scrapper wait after authenticating.
+- `--authorize-url` | `authorizeUrl` The usual host moodle link you use to enter it. Include the protocol(e.g http, https, https://mymoodle.com)
+- `--wait-page-after-login | waitPageAfterLogin` - What page should the scrapper wait after authenticating. For example, it can be the dashboard or the home page.
 - `--modules-list-page | modulesListPage` - What page contains the list of modules. This scrapper uses the Dashboard as basis to obtain the modules list.
-- `--username <moodle-login-username>` | `username` The username you use to login.
+- `--username <moodle-login-username>` | `username` The username you use to login. (UNOPERATIONAL AT THE MOMENT)
 - `--download-path <path>` | `downloadPath` The path where the resources will be downloaded(By default it's the `./downloads` folder located in the root of the project).
 
-- `--headless` | `headless` When this parameter is set to `true`, Puppeteer will be executed with the option with the [headless mode](https://pptr.dev/api/puppeteer.browserlaunchargumentoptions.headless/) activated. Headless mode allows the scrapper to run without displaying the UI. Default value is `false`. Optional.
+- `--headless` | `headless` When this parameter is set to `true`, Puppeteer will be executed with the option with the [headless mode](https://pptr.dev/api/puppeteer.browserlaunchargumentoptions.headless/) activated. Headless mode allows the scrapper to run without displaying the UI. Default value is `false`. Optional. (DO NOT USE. BUGS AT THE MOMENT)
 
-- `--auth-method` | `authMethod` - It can have one of the following values: `"user-control"`, `"terminal-user-passw"`. Default `user-control`
+- `--auth-method` | `authMethod` - It can have one of the following values: `"user-control"`, `"terminal-user-passw"`. Default `user-control`. (terminal-user-passw IS NOT OPERATIONAL.)
 
 
 - - `user-control` allows you to insert your username and password in the browser's page like an usual login procedure.
