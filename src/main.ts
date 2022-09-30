@@ -176,7 +176,7 @@ async function execute() : Promise<void>{
       }
       let moduleSelectionSplit = moduleSelection.moduleChoices.split(",");
       let wrongQueries = [];
-      for (const moduleQuery of moduleSelectionSplit) {
+      for (let moduleQuery of moduleSelectionSplit) {
         
         let moduleIndex = Number.parseInt(moduleQuery);
         let foundModulePage: ModulePage | undefined = undefined;
