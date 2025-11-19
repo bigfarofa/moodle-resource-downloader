@@ -10,7 +10,7 @@ Web scrapper built with [Puppeteer](https://developers.google.com/web/tools/pupp
 I made this because I needed to download a lot of resources and automating the process seemed a fun way to learn about web scraping.
 
 ## DISCLOSURE
-This scrapper was developed based on the interface of University of Greenwich's moodle. So it might not work on other moodles.
+This scrapper was developed based on the interface of University of Greenwich's moodle in 2022. So it might not work on other moodles.
 ## Pre-Requisites
 Before installing the scrapper, you will need the following:
 
