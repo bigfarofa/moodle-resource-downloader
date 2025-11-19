@@ -4,13 +4,13 @@
 ## About
 Web scrapper built with [Puppeteer](https://developers.google.com/web/tools/puppeteer/) and Typescript, with its focus being downloading moodle resources. Additionally it organises them for each module and section/week.
 
-![Structured file resources](downloads_folder_screenshot.png "Structured file resources")
+![Moodle Resource Downloader Demo GIF](moodle_scraper_demo.gif "Moodle Resource Downloader Demo GIF")
+
 ## Why?
 I made this because I needed to download a lot of resources and automating the process seemed a fun way to learn about web scraping.
 
 ## DISCLOSURE
-This scrapper was developed based on the interface of a education institution that I was part of. So it might not work on yours.
-
+This scrapper was developed based on the interface of University of Greenwich's moodle. So it might not work other moodles.
 ## Pre-Requisites
 Before installing the scrapper, you will need the following:
 
