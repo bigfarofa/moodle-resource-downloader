@@ -2,7 +2,7 @@
 
 
 ## About
-Web scrapper built with [Puppeteer](https://developers.google.com/web/tools/puppeteer/) and Typescript, with its focus being downloading moodle resources. Additionally it organises them for each module and section/week.
+Web scrapper built with [Puppeteer](https://developers.google.com/web/tools/puppeteer/) and Typescript, with its focus being downloading moodle's teaching resources. Additionally it organises them for by module and section/week.
 
 ![Moodle Resource Downloader Demo GIF](moodle_scraper_demo.gif "Moodle Resource Downloader Demo GIF")
 
